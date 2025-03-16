@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1742127323455,
+      "tag": "0000_kind_ben_grimm",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742128410652,
+      "tag": "0001_married_landau",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742128427522,
+      "tag": "0002_unknown_black_crow",
+      "breakpoints": true
+    }
+  ]
+}
