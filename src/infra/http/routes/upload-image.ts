@@ -1,5 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
+import { db } from "../../db";
+import { schema } from "../../db/schemas";
 
 export const uploadImageRoute: FastifyPluginAsync = async (server) => {
   server.post(
@@ -20,6 +22,13 @@ export const uploadImageRoute: FastifyPluginAsync = async (server) => {
       },
     },
     async (request, reply) => {
+
+      await db.insert(schema.uploads).values({
+        name: 'test.jpg',
+        remoteKey: 'test.jpg',
+        remoteURL: 'http://test.com.br',
+      })
+
       return reply.status(201).send({ uploadId: "test" });
     }
   );
