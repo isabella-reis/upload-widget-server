@@ -1,14 +1,14 @@
 {
     "name": "upload-widget-server",
     "version": "1.0.0",
+    "type": "module",
+    "description": "",
     "main": "index.js",
     "scripts": {
-      "dev": "tsx watch src/infra/http/server.ts",
-      "tsc": "tsc"
+      "dev": "tsx watch --env-file .env src/infra/http/server.ts"
     },
     "author": "",
     "license": "ISC",
-    "description": "",
     "devDependencies": {
       "@biomejs/biome": "^1.9.4",
       "@types/node": "^22.13.10",
