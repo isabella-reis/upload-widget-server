@@ -1,16 +1,16 @@
 import { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 import { uploadImage } from "../../../app/services/upload-image";
-
+import { isRight, unwrapEither } from "../../../shared/either";
 
 /**
  * Rota para upload de imagens.
- * 
- * Essa rota permite que usuários enviem imagens utilizando `multipart/form-data`. 
+ *
+ * Essa rota permite que usuários enviem imagens utilizando `multipart/form-data`.
  * O arquivo é validado quanto ao tamanho e sua presença na requisição.
- * 
+ *
  * @constant {FastifyPluginAsync} uploadImageRoute - Plugin do Fastify que registra a rota de upload de imagens.
- * 
+ *
  * @param {import("fastify").FastifyInstance} server - Instância do servidor Fastify.
  * @returns {Promise<void>} - Retorna uma Promise que resolve quando a rota é registrada.
  */
@@ -22,20 +22,25 @@ export const uploadImageRoute: FastifyPluginAsync = async (server) => {
         summary: "Upload an image",
         consumes: ["multipart/form-data"],
         response: {
-          201: z.object({ uploadId: z.string() }),
-          400: z
-            .object({ message: z.string() }),
+          201: z.null().describe("Image uploaded."),
+          400: z.object({ message: z.string() }),
         },
       },
     },
 
-    
     /**
      * Manipulador da requisição de upload.
-     * 
-     * @param {import("fastify").FastifyRequest} request - Objeto da requisição.
+     *
+     * @param {import("fastify").FastifyRequest} request - Objeto da requisição do Fastify.
      * @param {import("fastify").FastifyReply} reply - Objeto de resposta do Fastify.
      * @returns {Promise<import("fastify").FastifyReply>} - Retorna a resposta HTTP apropriada.
+     *
+     * @throws {Error} Caso ocorra um erro inesperado no processo de upload.
+     *
+     * @example
+     * // Exemplo de uso com cURL
+     * curl -X POST http://localhost:3000/uploads \
+     *      -F "file=@imagem.jpg"
      */
     async (request, reply) => {
       const uploadedFile = await request.file({
@@ -45,17 +50,27 @@ export const uploadImageRoute: FastifyPluginAsync = async (server) => {
       });
 
       if (!uploadedFile) {
-        return reply.status(400).send({ message: 'File is required.' })
+        return reply.status(400).send({ message: "File is required." });
       }
 
       // Realiza o upload do arquivo
-      await uploadImage({
+      const result = await uploadImage({
         fileName: uploadedFile.filename,
         contentType: uploadedFile.mimetype,
         contentStream: uploadedFile.file,
-      })
+      });
 
-      return reply.status(201).send({ uploadId: "test" });
+      if (isRight(result)) {
+        return reply.status(201).send();
+      }
+
+      // Desempacota o erro e retorna uma resposta apropriada
+      const error = unwrapEither(result);
+
+      switch (error.constructor.name) {
+        case "InvalidFileFormat":
+          return reply.status(400).send({ message: error.message });
+      }
     }
   );
 };
