@@ -25,7 +25,6 @@ const uploadFileToStorageInput = z.object({
 
 type UploadFileToStorageInput = z.input<typeof uploadFileToStorageInput> 
 
-
 /**
  * Faz o upload de um arquivo para o Cloudflare R2.
  *
@@ -53,7 +52,7 @@ export async function uploadFileToStorage(input: UploadFileToStorageInput) {
 
     const fileExtension = extname(fileName)
     const fileNameWithoutExtension = basename(fileName)
-    const sanitizedFileName = fileNameWithoutExtension.replace(/[^a-zA-Z0-9^]/g, '')
+    const sanitizedFileName = fileNameWithoutExtension.replace(/[^a-zA-Z0-9]/g, '')
     const sanitizedFileNameWithExtension = sanitizedFileName.concat(fileExtension)
 
     const uniqueFileName = `${folder}/${randomUUID()}-${sanitizedFileNameWithExtension}`

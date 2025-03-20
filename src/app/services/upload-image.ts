@@ -34,7 +34,6 @@ type UploadImageInput = z.input<typeof uploadImageInput>;
 
 const allowedMimeType = ["image/jpg", "image/jpeg", "image/png", "image/webp"];
 
-
 /**
  * Realiza o upload de uma imagem, validando os dados de entrada e armazenando a imagem no banco de dados.
  *
@@ -66,7 +65,6 @@ export async function uploadImage(
   if (!allowedMimeType.includes(contentType)) {
     return makeLeft(new InvalidFileFormat());
   }
-
   
   // Realiza o upload de uma imagem para o Cloudflare R2 e armazena as informações no banco de dados.  
   const { key, url } = await uploadFileToStorage({
