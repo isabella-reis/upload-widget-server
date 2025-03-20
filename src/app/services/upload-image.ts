@@ -4,6 +4,7 @@ import { schema } from "../../infra/db/schemas";
 import { db } from "../../infra/db";
 import { type Either, makeLeft, makeRight } from "../../shared/either";
 import { InvalidFileFormat } from "./errors/invalid-file-format";
+import { uploadFileToStorage } from "../../infra/storage/upload-file-to-storage";
 
 /**
  * Validação para o input de upload de imagem.
@@ -66,13 +67,21 @@ export async function uploadImage(
     return makeLeft(new InvalidFileFormat());
   }
 
-  // TODO: Carregar a imagem para o Cloudflare R2
+  
+  // Realiza o upload de uma imagem para o Cloudflare R2 e armazena as informações no banco de dados.  
+  const { key, url } = await uploadFileToStorage({
+    folder: 'images',
+    fileName,
+    contentType,
+    contentStream,
+  })
 
+  // Salvar os metadados do upload no banco de dados
   await db.insert(schema.uploads).values({
     name: fileName,
-    remoteKey: fileName,
-    remoteUrl: fileName,
+    remoteKey: key,
+    remoteUrl: url,
   });
 
-  return makeRight({ url: "" });
+  return makeRight({ url });
 }
