@@ -2,7 +2,7 @@ import { Readable } from "node:stream";
 import { z } from "zod";
 import { schema } from "../../infra/db/schemas";
 import { db } from "../../infra/db";
-import { Either, makeLeft, makeRight } from "../../shared/either";
+import { type Either, makeLeft, makeRight } from "../../shared/either";
 import { InvalidFileFormat } from "./errors/invalid-file-format";
 
 /**
