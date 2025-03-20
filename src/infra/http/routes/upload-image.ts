@@ -46,7 +46,7 @@ export const uploadImageRoute: FastifyPluginAsync = async (server) => {
       const uploadedFile = await request.file({
         limits: {
           fileSize: 1024 * 1024 * 5, // 5mb
-        },
+        }, 
       });
 
       if (!uploadedFile) {
@@ -59,6 +59,13 @@ export const uploadImageRoute: FastifyPluginAsync = async (server) => {
         contentType: uploadedFile.mimetype,
         contentStream: uploadedFile.file,
       });
+
+      // Vou consumindo o arquivo (funcao de cima) e caso bata o tamanho máximo, eu retonro erro (funcao de baixo)
+      if (uploadedFile.file.truncated) {
+        return reply.status(400).send({
+          message: 'File size limit reached.'
+        })
+      }
 
       if (isRight(result)) {
         console.log(unwrapEither(result))
