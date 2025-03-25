@@ -10,6 +10,8 @@ import { fastifyMultipart } from "@fastify/multipart";
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { transformSwaggerSchema } from "./transform-swagger-schema";
+import { getUploads } from "@/app/services/get-uploads";
+import { getUploadsRoute } from "./routes/get-uploads";
 
 const server = fastify();
 
@@ -65,7 +67,7 @@ server.register(fastifySwaggerUi, {
  * Registro das rotas da aplicação.
  */
 server.register(uploadImageRoute);
-
+server.register(getUploadsRoute);
 
 
 /**
