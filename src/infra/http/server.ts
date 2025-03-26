@@ -12,6 +12,7 @@ import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { transformSwaggerSchema } from "./transform-swagger-schema";
 import { getUploads } from "@/app/services/get-uploads";
 import { getUploadsRoute } from "./routes/get-uploads";
+import { exportUploadsRoute } from "./routes/export-uploads";
 
 const server = fastify();
 
@@ -68,7 +69,7 @@ server.register(fastifySwaggerUi, {
  */
 server.register(uploadImageRoute);
 server.register(getUploadsRoute);
-
+server.register(exportUploadsRoute);
 
 /**
  * Inicialização do servidor.
