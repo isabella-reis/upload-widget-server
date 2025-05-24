@@ -22,7 +22,7 @@ export function transformSwaggerSchema(data: TransformSwaggerSchemaData) {
     const { schema, url } = jsonSchemaTransform(data);
 
     if (schema.consumes?.includes('multipart/form-data')) {
-        if (schema.body == undefined) {
+        if (schema.body === undefined) {
             schema.body = {
                 type: 'object',
                 required: [],

@@ -1,1 +1,0 @@
-ALTER TABLE "uploads" RENAME COLUMN "idd" TO "id";
