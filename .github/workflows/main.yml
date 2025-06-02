@@ -30,7 +30,6 @@ jobs:
         run: |
           SHA=$(echo $GITHUB_SHA | head -c7)
           echo "sha=$SHA" >> $GITHUB_OUTPUT
-
       - name: Build and Push Image to AWS ECR
         id: build-push-Image
         env: 
